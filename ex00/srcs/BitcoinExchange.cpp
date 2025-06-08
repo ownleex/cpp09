@@ -6,7 +6,7 @@
 /*   By: ayarmaya <ayarmaya@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:37:05 by ayarmaya          #+#    #+#             */
-/*   Updated: 2025/06/08 20:06:47 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2025/06/08 22:56:23 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,8 @@ std::string BitcoinExchange::findClosestDate(const std::string& date) const
 
 bool BitcoinExchange::loadDatabase(const std::string& filename)
 {
-    std::ifstream file(filename);
+    // Utiliser .c_str() pour convertir std::string en const char* (C++98 compatible)
+    std::ifstream file(filename.c_str());
     if (!file.is_open())
     {
         std::cerr << "Error: could not open database file." << std::endl;
@@ -177,7 +178,8 @@ bool BitcoinExchange::loadDatabase(const std::string& filename)
 
 void BitcoinExchange::processInputFile(const std::string& filename) const
 {
-    std::ifstream file(filename);
+    // Utiliser .c_str() pour convertir std::string en const char* (C++98 compatible)
+    std::ifstream file(filename.c_str());
     if (!file.is_open())
     {
         std::cerr << "Error: could not open file." << std::endl;

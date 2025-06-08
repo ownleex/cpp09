@@ -6,7 +6,7 @@
 /*   By: ayarmaya <ayarmaya@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:37:05 by ayarmaya          #+#    #+#             */
-/*   Updated: 2025/06/08 23:29:18 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2025/06/08 23:47:47 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ bool BitcoinExchange::isValidDate(const std::string& date) const
     int day = std::atoi(date.substr(8, 2).c_str());
     
     // Vérifications basiques
-    if (year < 1000 || year > 9999)
+    if (year < 1 || year > 9999)
         return false;
     if (month < 1 || month > 12)
         return false;

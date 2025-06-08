@@ -6,7 +6,7 @@
 /*   By: ayarmaya <ayarmaya@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:37:05 by ayarmaya          #+#    #+#             */
-/*   Updated: 2025/06/08 22:56:23 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2025/06/08 23:11:15 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,16 +93,17 @@ bool BitcoinExchange::isValidDate(const std::string& date) const
 
 bool BitcoinExchange::isValidValue(const std::string& valueStr, double& value) const
 {
-    std::stringstream ss(valueStr);
-    ss >> value;
-    
-    if (ss.fail() || !ss.eof())
+    if (valueStr.empty())
         return false;
     
-    if (value < 0)
+    char* endptr;
+    value = std::strtod(valueStr.c_str(), &endptr);
+    
+    // Vérifier que toute la chaîne a été consommée
+    if (endptr == valueStr.c_str() || *endptr != '\0' || errno == ERANGE)
         return false;
     
-    if (value > 1000)
+    if (value < 0 || value > 1000)
         return false;
     
     return true;

@@ -6,7 +6,7 @@
 /*   By: ayarmaya <ayarmaya@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:37:05 by ayarmaya          #+#    #+#             */
-/*   Updated: 2025/06/08 23:11:15 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2025/06/08 23:29:18 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,10 +83,8 @@ bool BitcoinExchange::isValidDate(const std::string& date) const
             return false;
     }
     else if (month == 4 || month == 6 || month == 9 || month == 11) // Mois à 30 jours
-    {
         if (day > 30)
             return false;
-    }
     
     return true;
 }
@@ -123,9 +121,7 @@ std::string BitcoinExchange::findClosestDate(const std::string& date) const
     }
     
     if (it != _exchangeRates.end() && it->first == date)
-    {
         return date; // Date exacte trouvée
-    }
     
     // Retourner la date précédente la plus proche
     --it;
@@ -163,14 +159,13 @@ bool BitcoinExchange::loadDatabase(const std::string& filename)
         trimWhitespace(date);
         trimWhitespace(rateStr);
         
-        double rate;
-        std::stringstream ss(rateStr);
-        ss >> rate;
+        // Utiliser strtod au lieu de stringstream pour plus de cohérence
+        char* endptr;
+        errno = 0;
+        double rate = std::strtod(rateStr.c_str(), &endptr);
         
-        if (!ss.fail() && ss.eof())
-        {
+        if (endptr != rateStr.c_str() && *endptr == '\0' && errno != ERANGE)
             _exchangeRates[date] = rate;
-        }
     }
     
     file.close();

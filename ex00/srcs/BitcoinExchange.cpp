@@ -6,7 +6,7 @@
 /*   By: ayarmaya <ayarmaya@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:37:05 by ayarmaya          #+#    #+#             */
-/*   Updated: 2025/06/08 23:47:47 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2025/06/09 02:13:33 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,18 +62,19 @@ bool BitcoinExchange::isValidDate(const std::string& date) const
             return false;
     }
     
-    // Extraire année, mois, jour
-    int year = std::atoi(date.substr(0, 4).c_str());
-    int month = std::atoi(date.substr(5, 2).c_str());
-    int day = std::atoi(date.substr(8, 2).c_str());
-    
-    // Vérifications basiques
-    if (year < 1 || year > 9999)
+    // Extraire les valeurs
+    int year, month, day;
+    std::stringstream yearSS(date.substr(0, 4));
+    std::stringstream monthSS(date.substr(5, 2));
+    std::stringstream daySS(date.substr(8, 2));
+
+    // Regrouper toutes les vérifications qui retournent false
+    if (!(yearSS >> year) || !yearSS.eof() || year < 1 || year > 9999 ||
+        !(monthSS >> month) || !monthSS.eof() || month < 1 || month > 12 ||
+        !(daySS >> day) || !daySS.eof() || day < 1 || day > 31)    
+    {
         return false;
-    if (month < 1 || month > 12)
-        return false;
-    if (day < 1 || day > 31)
-        return false;
+    }
     
     // Vérifications plus spécifiques pour les mois
     if (month == 2) // Février
@@ -94,11 +95,10 @@ bool BitcoinExchange::isValidValue(const std::string& valueStr, double& value) c
     if (valueStr.empty())
         return false;
     
-    char* endptr;
-    value = std::strtod(valueStr.c_str(), &endptr);
+    std::stringstream ss(valueStr);
     
-    // Vérifier que toute la chaîne a été consommée
-    if (endptr == valueStr.c_str() || *endptr != '\0' || errno == ERANGE)
+    // Conversion avec vérification d'erreur
+    if (!(ss >> value) || !ss.eof())
         return false;
     
     if (value < 0 || value > 1000)
@@ -159,12 +159,10 @@ bool BitcoinExchange::loadDatabase(const std::string& filename)
         trimWhitespace(date);
         trimWhitespace(rateStr);
         
-        // Utiliser strtod au lieu de stringstream pour plus de cohérence
-        char* endptr;
-        errno = 0;
-        double rate = std::strtod(rateStr.c_str(), &endptr);
+        std::stringstream ss(rateStr);
+        double rate;
         
-        if (endptr != rateStr.c_str() && *endptr == '\0' && errno != ERANGE)
+        if (ss >> rate && ss.eof())
             _exchangeRates[date] = rate;
     }
     

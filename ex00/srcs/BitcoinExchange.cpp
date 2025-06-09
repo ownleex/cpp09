@@ -6,7 +6,7 @@
 /*   By: ayarmaya <ayarmaya@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:37:05 by ayarmaya          #+#    #+#             */
-/*   Updated: 2025/06/09 02:13:33 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2025/06/09 23:50:21 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,17 +93,29 @@ bool BitcoinExchange::isValidDate(const std::string& date) const
 bool BitcoinExchange::isValidValue(const std::string& valueStr, double& value) const
 {
     if (valueStr.empty())
+    {
+        std::cout << "Error: bad input => " << valueStr << std::endl;
         return false;
+    }
     
     std::stringstream ss(valueStr);
     
     // Conversion avec vérification d'erreur
     if (!(ss >> value) || !ss.eof())
+    {
+        std::cout << "Error: bad input => " << valueStr << std::endl;
         return false;
-    
-    if (value < 0 || value > 1000)
+    }
+    if (value < 0)
+    {
+        std::cout << "Error: not a positive number." << std::endl;
         return false;
-    
+    }
+    if (value > 1000)
+    {
+        std::cout << "Error: too large a number." << std::endl;
+        return false;
+    }
     return true;
 }
 
@@ -214,16 +226,8 @@ void BitcoinExchange::processInputFile(const std::string& filename) const
         // Vérifier la validité de la valeur
         double value;
         if (!isValidValue(valueStr, value))
-        {
-            if (value < 0)
-                std::cout << "Error: not a positive number." << std::endl;
-            else if (value > 1000)
-                std::cout << "Error: too large a number." << std::endl;
-            else
-                std::cout << "Error: bad input => " << valueStr << std::endl;
-            continue;
-        }
-        
+            continue; // Le message d'erreur est déjà affiché dans isValidValue
+
         // Trouver la date la plus proche
         std::string closestDate = findClosestDate(date);
         if (closestDate.empty())

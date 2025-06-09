@@ -6,7 +6,7 @@
 /*   By: ayarmaya <ayarmaya@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:37:05 by ayarmaya          #+#    #+#             */
-/*   Updated: 2025/06/09 23:50:21 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2025/06/10 00:31:45 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,17 +68,18 @@ bool BitcoinExchange::isValidDate(const std::string& date) const
     std::stringstream monthSS(date.substr(5, 2));
     std::stringstream daySS(date.substr(8, 2));
 
-    // Regrouper toutes les vérifications qui retournent false
-    if (!(yearSS >> year) || !yearSS.eof() || year < 1 || year > 9999 ||
-        !(monthSS >> month) || !monthSS.eof() || month < 1 || month > 12 ||
-        !(daySS >> day) || !daySS.eof() || day < 1 || day > 31)    
+    // >> pour convertir un type
+    if ( !(yearSS >> year)   ||  !yearSS.eof()  ||  year < 1  ||  year > 9999 ||
+         !(monthSS >> month) ||  !monthSS.eof() ||  month < 1 ||  month > 12  ||
+         !(daySS >> day)     ||  !daySS.eof()   ||  day < 1   ||  day > 31 )    
     {
         return false;
     }
     
     // Vérifications plus spécifiques pour les mois
-    if (month == 2) // Février
+    if (month == 2) // Février bisextile
     {
+        // si divisible par 4 mais pas par 100 ou si divisble par 400 alors bisextile
         bool isLeap = (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
         if (day > (isLeap ? 29 : 28))
             return false;

@@ -6,7 +6,7 @@
 /*   By: ayarmaya <ayarmaya@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:43:19 by ayarmaya          #+#    #+#             */
-/*   Updated: 2025/05/30 22:44:07 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2025/06/10 00:38:32 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <stack>
 #include <sstream>
 #include <cctype>
+#include <cstdlib>
 
 class RPN
 {

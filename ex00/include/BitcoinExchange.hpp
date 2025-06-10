@@ -6,7 +6,7 @@
 /*   By: ayarmaya <ayarmaya@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:36:45 by ayarmaya          #+#    #+#             */
-/*   Updated: 2025/06/10 16:20:17 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2025/06/10 16:45:38 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ class BitcoinExchange
 {
 private:
     // map car trie automatiquement par clé (dates) et offre la methode upper_bound()
-    // qui renvoie la valeur superieur
+    // qui renvoie la valeur superieur ou sur .end() ce qui nous permet de reculer d'une case 
     std::map<std::string, double> _exchangeRates;
     
     bool isValidDate(const std::string& date) const;

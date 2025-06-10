@@ -6,7 +6,7 @@
 /*   By: ayarmaya <ayarmaya@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:37:05 by ayarmaya          #+#    #+#             */
-/*   Updated: 2025/06/10 16:46:02 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2025/06/10 17:06:34 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,13 +137,10 @@ std::string BitcoinExchange::findClosestDate(const std::string& date) const
 
 bool BitcoinExchange::loadDatabase(const std::string& filename)
 {
-    // Utiliser .c_str() pour convertir std::string en const char* (C++98 compatible)
+    // Utiliser .c_str() pour convertir std::string en const char* pour ifstream (C++98 compatible)
     std::ifstream file(filename.c_str());
     if (!file.is_open())
-    {
-        std::cerr << "Error: could not open database file." << std::endl;
         return false;
-    }
     
     std::string line;
     bool firstLine = true;
@@ -177,15 +174,12 @@ bool BitcoinExchange::loadDatabase(const std::string& filename)
     return true;
 }
 
-void BitcoinExchange::processInputFile(const std::string& filename) const
+bool BitcoinExchange::processInputFile(const std::string& filename) const
 {
-    // Utiliser .c_str() pour convertir std::string en const char* (C++98 compatible)
+    // Utiliser .c_str() pour convertir std::string en const char* pour ifstream (C++98 compatible)
     std::ifstream file(filename.c_str());
     if (!file.is_open())
-    {
-        std::cerr << "Error: could not open file." << std::endl;
-        return;
-    }
+        return false;
     
     std::string line;
     bool firstLine = true;
@@ -195,7 +189,7 @@ void BitcoinExchange::processInputFile(const std::string& filename) const
         if (firstLine)
         {
             firstLine = false;
-            continue; // Ignorer la première ligne si c'est un header
+            continue; // Ignorer la première ligne
         }
         
         size_t pipePos = line.find('|');
@@ -238,4 +232,5 @@ void BitcoinExchange::processInputFile(const std::string& filename) const
     }
     
     file.close();
+    return true;
 }

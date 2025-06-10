@@ -6,7 +6,7 @@
 /*   By: ayarmaya <ayarmaya@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:36:45 by ayarmaya          #+#    #+#             */
-/*   Updated: 2025/06/10 16:45:38 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2025/06/10 17:03:31 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ public:
     ~BitcoinExchange();
     
     bool loadDatabase(const std::string& filename);
-    void processInputFile(const std::string& filename) const;
+    bool processInputFile(const std::string& filename) const;
 };
 
 #endif

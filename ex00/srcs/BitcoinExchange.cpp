@@ -6,7 +6,7 @@
 /*   By: ayarmaya <ayarmaya@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:37:05 by ayarmaya          #+#    #+#             */
-/*   Updated: 2025/06/10 17:06:34 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2025/06/10 17:55:09 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,10 +122,11 @@ bool BitcoinExchange::isValidValue(const std::string& valueStr, double& value) c
 
 std::string BitcoinExchange::findClosestDate(const std::string& date) const
 {
-    // upper_bound renvoie un it sur valeur > date ou sur .end()
+    // upper_bound renvoie un it sur valeur > date sinon sur .end()
     std::map<std::string, double>::const_iterator it = _exchangeRates.upper_bound(date);
     
     // Si on peut reculer, on a notre date ≤
+    // si sur .begin() c'est qu'on est sur une date anterieure
     if (it != _exchangeRates.begin()) {
         --it;
         return it->first;
@@ -215,7 +216,7 @@ bool BitcoinExchange::processInputFile(const std::string& filename) const
         // Vérifier la validité de la valeur
         double value;
         if (!isValidValue(valueStr, value))
-            continue; // Le message d'erreur est déjà affiché dans isValidValue
+            continue;
 
         // Trouver la date la plus proche
         std::string closestDate = findClosestDate(date);

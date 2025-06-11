@@ -6,7 +6,7 @@
 /*   By: ayarmaya <ayarmaya@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:49:56 by ayarmaya          #+#    #+#             */
-/*   Updated: 2025/06/12 00:33:12 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2025/06/12 01:00:23 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,11 +118,11 @@ std::vector<int> PmergeMe::createJacobsthalSequenceVector(int n) {
     return jacobsthal;
 }
 
-int PmergeMe::binarySearchVector(const std::vector<int>& arr, int value, int end) {
+int PmergeMe::binarySearchVector(const std::vector<int>& vec, int value, int end) {
     int left = 0, right = end;
     while (left < right) {
         int mid = left + (right - left) / 2;
-        if (arr[mid] < value)
+        if (vec[mid] < value)
             left = mid + 1;
         else
             right = mid;
@@ -130,20 +130,20 @@ int PmergeMe::binarySearchVector(const std::vector<int>& arr, int value, int end
     return left;
 }
 
-void PmergeMe::fordJohnsonSortVector(std::vector<int>& arr) {
-    int n = arr.size();
+void PmergeMe::fordJohnsonSortVector(std::vector<int>& vec) {
+    int n = vec.size();
     if (n <= 1) return;
     
     // Étape 1: Grouper par paires et trier chaque paire
     std::vector<std::pair<int, int> > pairs;
     bool hasStraggler = (n % 2 == 1);
-    int straggler = hasStraggler ? arr[n - 1] : 0;
+    int straggler = hasStraggler ? vec[n - 1] : 0;
     
     for (int i = 0; i < n - (hasStraggler ? 1 : 0); i += 2) {
-        if (arr[i] > arr[i + 1])
-            pairs.push_back(std::make_pair(arr[i], arr[i + 1]));
+        if (vec[i] > vec[i + 1])
+            pairs.push_back(std::make_pair(vec[i], vec[i + 1]));
         else
-            pairs.push_back(std::make_pair(arr[i + 1], arr[i]));
+            pairs.push_back(std::make_pair(vec[i + 1], vec[i]));
     }
     
     // Étape 2: Trier les paires par leur plus grand élément (récursion)
@@ -222,7 +222,7 @@ void PmergeMe::fordJohnsonSortVector(std::vector<int>& arr) {
         mainSequence.insert(mainSequence.begin() + pos, straggler);
     }
     
-    arr = mainSequence;
+    vec = mainSequence;
 }
 
 // ========== FORD-JOHNSON POUR DEQUE ==========
@@ -248,11 +248,11 @@ std::deque<int> PmergeMe::createJacobsthalSequenceDeque(int n) {
     return jacobsthal;
 }
 
-int PmergeMe::binarySearchDeque(const std::deque<int>& arr, int value, int end) {
+int PmergeMe::binarySearchDeque(const std::deque<int>& deq, int value, int end) {
     int left = 0, right = end;
     while (left < right) {
         int mid = left + (right - left) / 2;
-        if (arr[mid] < value)
+        if (deq[mid] < value)
             left = mid + 1;
         else
             right = mid;
@@ -260,20 +260,20 @@ int PmergeMe::binarySearchDeque(const std::deque<int>& arr, int value, int end) 
     return left;
 }
 
-void PmergeMe::fordJohnsonSortDeque(std::deque<int>& arr) {
-    int n = arr.size();
+void PmergeMe::fordJohnsonSortDeque(std::deque<int>& deq) {
+    int n = deq.size();
     if (n <= 1) return;
     
     // Étape 1: Grouper par paires et trier chaque paire
     std::deque<std::pair<int, int> > pairs;
     bool hasStraggler = (n % 2 == 1);
-    int straggler = hasStraggler ? arr[n - 1] : 0;
+    int straggler = hasStraggler ? deq[n - 1] : 0;
     
     for (int i = 0; i < n - (hasStraggler ? 1 : 0); i += 2) {
-        if (arr[i] > arr[i + 1])
-            pairs.push_back(std::make_pair(arr[i], arr[i + 1]));
+        if (deq[i] > deq[i + 1])
+            pairs.push_back(std::make_pair(deq[i], deq[i + 1]));
         else
-            pairs.push_back(std::make_pair(arr[i + 1], arr[i]));
+            pairs.push_back(std::make_pair(deq[i + 1], deq[i]));
     }
     
     // Étape 2: Trier les paires par leur plus grand élément (récursion)
@@ -347,5 +347,5 @@ void PmergeMe::fordJohnsonSortDeque(std::deque<int>& arr) {
         mainSequence.insert(mainSequence.begin() + pos, straggler);
     }
     
-    arr = mainSequence;
+    deq = mainSequence;
 }

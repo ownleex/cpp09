@@ -6,7 +6,7 @@
 /*   By: ayarmaya <ayarmaya@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:49:56 by ayarmaya          #+#    #+#             */
-/*   Updated: 2025/06/11 19:40:11 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2025/06/11 20:54:11 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,28 +61,25 @@ void PmergeMe::display() {
 void PmergeMe::sort() {
     display();
 
-    const int repeat = 1000;
-    double total_time1 = 0;
-    for (int i = 0; i < repeat; ++i) {
-        std::vector<int> tmp = _vec;
-        timeval start1, end1;
-        gettimeofday(&start1, NULL);
-        mergeInsertSort(tmp, 0, tmp.size() - 1);
-        gettimeofday(&end1, NULL);
-        total_time1 += (end1.tv_sec - start1.tv_sec) * 1e6 + (end1.tv_usec - start1.tv_usec);
-    }
-    double time1 = total_time1 / repeat;
+    // ========== MESURE VECTOR (en millisecondes comme le code qui marche) ==========
+    std::vector<int> vecCopy = _vec;
+    clock_t start1 = clock();
+    mergeInsertSort(vecCopy, 0, vecCopy.size() - 1);
+    clock_t end1 = clock();
+    
+    double time1 = static_cast<double>(end1 - start1) / CLOCKS_PER_SEC * 1000; // millisecondes
 
-    double total_time2 = 0;
-    for (int i = 0; i < repeat; ++i) {
-        std::deque<int> tmp = _deq;
-        timeval start2, end2;
-        gettimeofday(&start2, NULL);
-        mergeInsertSort(tmp, 0, tmp.size() - 1);
-        gettimeofday(&end2, NULL);
-        total_time2 += (end2.tv_sec - start2.tv_sec) * 1e6 + (end2.tv_usec - start2.tv_usec);
-    }
-    double time2 = total_time2 / repeat;
+    // ========== MESURE DEQUE (en millisecondes comme le code qui marche) ==========
+    std::deque<int> deqCopy = _deq;
+    clock_t start2 = clock();
+    mergeInsertSort(deqCopy, 0, deqCopy.size() - 1);
+    clock_t end2 = clock();
+    
+    double time2 = static_cast<double>(end2 - start2) / CLOCKS_PER_SEC * 1000; // millisecondes
+
+    // Mettre à jour les conteneurs originaux
+    _vec = vecCopy;
+    _deq = deqCopy;
 
     // Afficher après tri
     std::cout << "After: ";
@@ -94,15 +91,12 @@ void PmergeMe::sort() {
     if (_vec.size() > 5) std::cout << " [...]";
     std::cout << std::endl;
 
-    // Afficher les temps
+    // Afficher les temps en millisecondes (comme le code qui marche)
     std::cout << "Time to process a range of " << _vec.size() 
-              << " elements with std::vector : " << std::fixed << std::setprecision(5) 
-              << time1 << " us" << std::endl;
+              << " elements with std::vector : " << time1 << " ms" << std::endl;
     std::cout << "Time to process a range of " << _deq.size() 
-              << " elements with std::deque  : " << std::fixed << std::setprecision(5) 
-              << time2 << " us" << std::endl;
+              << " elements with std::deque  : " << time2 << " ms" << std::endl;
 }
-
 
 // ========== VECTOR IMPLEMENTATION ==========
 

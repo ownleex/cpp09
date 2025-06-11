@@ -6,7 +6,7 @@
 /*   By: ayarmaya <ayarmaya@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:49:56 by ayarmaya          #+#    #+#             */
-/*   Updated: 2025/06/11 21:16:56 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2025/06/11 22:20:19 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ void PmergeMe::sort() {
 
 // ========== FORD-JOHNSON POUR VECTOR ==========
 
-std::vector<int> PmergeMe::createJacobsthalSequence(int n) {
+std::vector<int> PmergeMe::createJacobsthalSequenceVector(int n) {
     std::vector<int> jacobsthal;
     if (n <= 0) return jacobsthal;
     
@@ -123,7 +123,7 @@ std::vector<int> PmergeMe::createJacobsthalSequence(int n) {
     return jacobsthal;
 }
 
-int PmergeMe::binarySearch(const std::vector<int>& arr, int value, int end) {
+int PmergeMe::binarySearchVector(const std::vector<int>& arr, int value, int end) {
     int left = 0, right = end;
     while (left < right) {
         int mid = left + (right - left) / 2;
@@ -187,14 +187,14 @@ void PmergeMe::fordJohnsonSort(std::vector<int>& arr) {
         mainSequence.insert(mainSequence.begin(), pendingElements[0]);
         
         // Générer la séquence de Jacobsthal pour les insertions optimales
-        std::vector<int> jacobsthal = createJacobsthalSequence(pendingElements.size());
+        std::vector<int> jacobsthal = createJacobsthalSequenceVector(pendingElements.size());
         std::vector<bool> inserted(pendingElements.size(), false);
         inserted[0] = true;
         
         for (size_t i = 0; i < jacobsthal.size(); ++i) {
             int idx = jacobsthal[i] - 1; // Ajuster pour l'index 0
             if (idx < static_cast<int>(pendingElements.size()) && !inserted[idx]) {
-                int pos = binarySearch(mainSequence, pendingElements[idx], mainSequence.size());
+                int pos = binarySearchVector(mainSequence, pendingElements[idx], mainSequence.size());
                 mainSequence.insert(mainSequence.begin() + pos, pendingElements[idx]);
                 inserted[idx] = true;
             }
@@ -204,7 +204,7 @@ void PmergeMe::fordJohnsonSort(std::vector<int>& arr) {
                 int prevIdx = jacobsthal[i - 1] - 1;
                 for (int j = idx - 1; j > prevIdx; --j) {
                     if (j >= 0 && j < static_cast<int>(pendingElements.size()) && !inserted[j]) {
-                        int pos = binarySearch(mainSequence, pendingElements[j], mainSequence.size());
+                        int pos = binarySearchVector(mainSequence, pendingElements[j], mainSequence.size());
                         mainSequence.insert(mainSequence.begin() + pos, pendingElements[j]);
                         inserted[j] = true;
                     }
@@ -215,7 +215,7 @@ void PmergeMe::fordJohnsonSort(std::vector<int>& arr) {
         // Insérer les éléments restants
         for (size_t i = 0; i < inserted.size(); ++i) {
             if (!inserted[i]) {
-                int pos = binarySearch(mainSequence, pendingElements[i], mainSequence.size());
+                int pos = binarySearchVector(mainSequence, pendingElements[i], mainSequence.size());
                 mainSequence.insert(mainSequence.begin() + pos, pendingElements[i]);
             }
         }
@@ -223,7 +223,7 @@ void PmergeMe::fordJohnsonSort(std::vector<int>& arr) {
     
     // Insérer l'élément isolé s'il existe
     if (hasStraggler) {
-        int pos = binarySearch(mainSequence, straggler, mainSequence.size());
+        int pos = binarySearchVector(mainSequence, straggler, mainSequence.size());
         mainSequence.insert(mainSequence.begin() + pos, straggler);
     }
     

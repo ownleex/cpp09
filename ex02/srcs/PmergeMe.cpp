@@ -6,7 +6,7 @@
 /*   By: ayarmaya <ayarmaya@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:49:56 by ayarmaya          #+#    #+#             */
-/*   Updated: 2025/06/11 22:22:36 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2025/06/11 23:52:57 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,8 +232,8 @@ void PmergeMe::fordJohnsonSortVector(std::vector<int>& arr) {
 
 // ========== FORD-JOHNSON POUR DEQUE ==========
 
-std::vector<int> PmergeMe::createJacobsthalSequenceDeque(int n) {
-    std::vector<int> jacobsthal;
+std::deque<int> PmergeMe::createJacobsthalSequenceDeque(int n) {
+    std::deque<int> jacobsthal;
     if (n <= 0) return jacobsthal;
     
     jacobsthal.push_back(1);
@@ -270,7 +270,7 @@ void PmergeMe::fordJohnsonSortDeque(std::deque<int>& arr) {
     if (n <= 1) return;
     
     // Étape 1: Grouper par paires et trier chaque paire
-    std::vector<std::pair<int, int> > pairs;
+    std::deque<std::pair<int, int> > pairs;
     bool hasStraggler = (n % 2 == 1);
     int straggler = hasStraggler ? arr[n - 1] : 0;
     
@@ -290,7 +290,7 @@ void PmergeMe::fordJohnsonSortDeque(std::deque<int>& arr) {
         fordJohnsonSortDeque(maxElements);
     
     // Réorganiser les paires selon l'ordre des maxElements triés
-    std::vector<std::pair<int, int> > sortedPairs;
+    std::deque<std::pair<int, int> > sortedPairs;
     for (size_t i = 0; i < maxElements.size(); ++i) {
         for (size_t j = 0; j < pairs.size(); ++j) {
             if (pairs[j].first == maxElements[i]) {
@@ -304,7 +304,7 @@ void PmergeMe::fordJohnsonSortDeque(std::deque<int>& arr) {
     
     // Étape 3: Construire la séquence principale
     std::deque<int> mainSequence;
-    std::vector<int> pendingElements;
+    std::deque<int> pendingElements;
     
     for (size_t i = 0; i < pairs.size(); ++i) {
         mainSequence.push_back(pairs[i].first);
@@ -315,8 +315,8 @@ void PmergeMe::fordJohnsonSortDeque(std::deque<int>& arr) {
     if (!pendingElements.empty()) {
         mainSequence.push_front(pendingElements[0]);
         
-        std::vector<int> jacobsthal = createJacobsthalSequenceDeque(pendingElements.size());
-        std::vector<bool> inserted(pendingElements.size(), false);
+        std::deque<int> jacobsthal = createJacobsthalSequenceDeque(pendingElements.size());
+        std::deque<bool> inserted(pendingElements.size(), false);
         inserted[0] = true;
         
         for (size_t i = 0; i < jacobsthal.size(); ++i) {

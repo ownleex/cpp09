@@ -6,7 +6,7 @@
 /*   By: ayarmaya <ayarmaya@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:43:58 by ayarmaya          #+#    #+#             */
-/*   Updated: 2025/05/30 22:45:54 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2025/06/10 23:00:19 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,27 +41,11 @@ bool RPN::isOperator(const std::string& token) const
 
 bool RPN::isValidNumber(const std::string& token) const
 {
-    if (token.empty())
-        return false;
-    
-    // Vérifier si c'est un chiffre unique (< 10)
+    // Accepter seulement les chiffres 0-9 (un seul caractère)
     if (token.length() == 1 && std::isdigit(token[0]))
         return true;
     
-    // Gérer les nombres négatifs (bien que pas explicitement demandé)
-    size_t start = 0;
-    if (token[0] == '-' && token.length() > 1)
-        start = 1;
-    
-    for (size_t i = start; i < token.length(); i++)
-    {
-        if (!std::isdigit(token[i]))
-            return false;
-    }
-    
-    // Vérifier que le nombre est < 10 (selon les consignes)
-    int num = std::atoi(token.c_str());
-    return (num >= 0 && num < 10);
+    return false;
 }
 
 double RPN::performOperation(double a, double b, const std::string& op) const
@@ -110,19 +94,15 @@ void RPN::processToken(const std::string& token)
 
 double RPN::evaluate(const std::string& expression)
 {
-    // Vider la pile au cas où elle contiendrait des données précédentes
-    while (!_operands.empty())
-        _operands.pop();
-    
-    std::stringstream ss(expression);
-    std::string token;
-    
     // Vérifier s'il y a des parenthèses (interdites)
     if (expression.find('(') != std::string::npos || 
         expression.find(')') != std::string::npos)
     {
         throw std::runtime_error("Error");
     }
+    
+    std::stringstream ss(expression);
+    std::string token;
     
     while (ss >> token)
     {
@@ -131,7 +111,9 @@ double RPN::evaluate(const std::string& expression)
     
     // À la fin, il doit y avoir exactement un élément dans la pile
     if (_operands.size() != 1)
+    {
         throw std::runtime_error("Error: invalid expression");
+    }
     
     return _operands.top();
 }

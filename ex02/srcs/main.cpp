@@ -6,12 +6,11 @@
 /*   By: ayarmaya <ayarmaya@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:50:05 by ayarmaya          #+#    #+#             */
-/*   Updated: 2025/06/11 18:58:17 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2025/06/11 22:29:02 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "PmergeMe.hpp"
-#include <iostream>
 
 int main(int argc, char** argv) {
     if (argc < 2) {

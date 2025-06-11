@@ -6,7 +6,7 @@
 /*   By: ayarmaya <ayarmaya@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:49:56 by ayarmaya          #+#    #+#             */
-/*   Updated: 2025/06/11 22:20:19 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2025/06/11 22:22:36 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,14 +69,14 @@ void PmergeMe::sort() {
     // Tri avec vector
     std::vector<int> vecCopy = _vec;
     clock_t start1 = clock();
-    fordJohnsonSort(vecCopy);
+    fordJohnsonSortVector(vecCopy);
     clock_t end1 = clock();
     double time1 = static_cast<double>(end1 - start1) / CLOCKS_PER_SEC * 1000000; // microsecondes
     
     // Tri avec deque
     std::deque<int> deqCopy = _deq;
     clock_t start2 = clock();
-    fordJohnsonSort(deqCopy);
+    fordJohnsonSortDeque(deqCopy);
     clock_t end2 = clock();
     double time2 = static_cast<double>(end2 - start2) / CLOCKS_PER_SEC * 1000000; // microsecondes
     
@@ -135,7 +135,7 @@ int PmergeMe::binarySearchVector(const std::vector<int>& arr, int value, int end
     return left;
 }
 
-void PmergeMe::fordJohnsonSort(std::vector<int>& arr) {
+void PmergeMe::fordJohnsonSortVector(std::vector<int>& arr) {
     int n = arr.size();
     if (n <= 1) return;
     
@@ -157,7 +157,7 @@ void PmergeMe::fordJohnsonSort(std::vector<int>& arr) {
         maxElements.push_back(pairs[i].first);
     
     if (maxElements.size() > 1)
-        fordJohnsonSort(maxElements);
+        fordJohnsonSortVector(maxElements);
     
     // Réorganiser les paires selon l'ordre des maxElements triés
     std::vector<std::pair<int, int> > sortedPairs;
@@ -265,7 +265,7 @@ int PmergeMe::binarySearchDeque(const std::deque<int>& arr, int value, int end) 
     return left;
 }
 
-void PmergeMe::fordJohnsonSort(std::deque<int>& arr) {
+void PmergeMe::fordJohnsonSortDeque(std::deque<int>& arr) {
     int n = arr.size();
     if (n <= 1) return;
     
@@ -287,7 +287,7 @@ void PmergeMe::fordJohnsonSort(std::deque<int>& arr) {
         maxElements.push_back(pairs[i].first);
     
     if (maxElements.size() > 1)
-        fordJohnsonSort(maxElements);
+        fordJohnsonSortDeque(maxElements);
     
     // Réorganiser les paires selon l'ordre des maxElements triés
     std::vector<std::pair<int, int> > sortedPairs;

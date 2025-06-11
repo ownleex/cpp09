@@ -6,19 +6,7 @@
 /*   By: ayarmaya <ayarmaya@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:49:48 by ayarmaya          #+#    #+#             */
-/*   Updated: 2025/06/11 21:06:52 by ayarmaya         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   PmergeMe.hpp                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ayarmaya <ayarmaya@student.42nice.fr>      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/30 22:49:48 by ayarmaya          #+#    #+#             */
-/*   Updated: 2025/06/11 18:58:41 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2025/06/11 21:16:31 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,26 +16,26 @@
 #include <vector>
 #include <deque>
 #include <string>
+#include <iostream>
 #include <ctime>
+#include <climits>
+#include <sstream>
+#include <cstdlib>
 
 class PmergeMe {
 private:
     std::vector<int> _vec;
     std::deque<int> _deq;
-    static const int THRESHOLD = 10;
     
-    // Fonction utilitaire pour mesurer le temps
-    double getTime();
+    // Ford-Johnson pour vector
+    void fordJohnsonSort(std::vector<int>& arr);
+    std::vector<int> createJacobsthalSequence(int n);
+    int binarySearch(const std::vector<int>& arr, int value, int end);
     
-    // Merge-insert sort pour vector
-    void mergeInsertSort(std::vector<int>& arr, int left, int right);
-    void merge(std::vector<int>& arr, int left, int mid, int right);
-    void insertionSort(std::vector<int>& arr, int left, int right);
-    
-    // Merge-insert sort pour deque  
-    void mergeInsertSort(std::deque<int>& arr, int left, int right);
-    void merge(std::deque<int>& arr, int left, int mid, int right);
-    void insertionSort(std::deque<int>& arr, int left, int right);
+    // Ford-Johnson pour deque
+    void fordJohnsonSort(std::deque<int>& arr);
+    std::vector<int> createJacobsthalSequenceDeque(int n);
+    int binarySearchDeque(const std::deque<int>& arr, int value, int end);
 
 public:
     PmergeMe();

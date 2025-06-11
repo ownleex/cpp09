@@ -6,7 +6,7 @@
 /*   By: ayarmaya <ayarmaya@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:49:48 by ayarmaya          #+#    #+#             */
-/*   Updated: 2025/06/11 20:35:43 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2025/06/11 21:06:52 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ private:
 
 public:
     PmergeMe();
+    PmergeMe(const PmergeMe& other);
+    PmergeMe& operator=(const PmergeMe& other);
     ~PmergeMe();
     
     bool parseArgs(int argc, char** argv);

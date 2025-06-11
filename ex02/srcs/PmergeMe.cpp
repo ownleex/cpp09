@@ -6,7 +6,7 @@
 /*   By: ayarmaya <ayarmaya@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:49:56 by ayarmaya          #+#    #+#             */
-/*   Updated: 2025/06/11 20:54:11 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2025/06/11 21:07:58 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,22 @@
 #include <iomanip>
 #include <sys/time.h>
 
+// Constructeur par défaut
 PmergeMe::PmergeMe() {}
+
+// Constructeur de copie
+PmergeMe::PmergeMe(const PmergeMe& other) : _vec(other._vec), _deq(other._deq) {}
+
+// Opérateur d'assignation
+PmergeMe& PmergeMe::operator=(const PmergeMe& other) {
+    if (this != &other) {
+        _vec = other._vec;
+        _deq = other._deq;
+    }
+    return *this;
+}
+
+// Destructeur
 PmergeMe::~PmergeMe() {}
 
 bool PmergeMe::parseArgs(int argc, char** argv) {
@@ -61,7 +76,7 @@ void PmergeMe::display() {
 void PmergeMe::sort() {
     display();
 
-    // ========== MESURE VECTOR (en millisecondes comme le code qui marche) ==========
+    // ========== MESURE VECTOR (en millisecondes) ==========
     std::vector<int> vecCopy = _vec;
     clock_t start1 = clock();
     mergeInsertSort(vecCopy, 0, vecCopy.size() - 1);

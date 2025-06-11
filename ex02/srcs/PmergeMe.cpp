@@ -6,7 +6,7 @@
 /*   By: ayarmaya <ayarmaya@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:49:56 by ayarmaya          #+#    #+#             */
-/*   Updated: 2025/06/11 23:52:57 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2025/06/12 00:04:57 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,14 +71,14 @@ void PmergeMe::sort() {
     clock_t start1 = clock();
     fordJohnsonSortVector(vecCopy);
     clock_t end1 = clock();
-    double time1 = static_cast<double>(end1 - start1) / CLOCKS_PER_SEC * 1000000; // microsecondes
+    double time1 = static_cast<double>(end1 - start1) / CLOCKS_PER_SEC * 1000.0; // microsecondes
     
     // Tri avec deque
     std::deque<int> deqCopy = _deq;
     clock_t start2 = clock();
     fordJohnsonSortDeque(deqCopy);
     clock_t end2 = clock();
-    double time2 = static_cast<double>(end2 - start2) / CLOCKS_PER_SEC * 1000000; // microsecondes
+    double time2 = static_cast<double>(end2 - start2) / CLOCKS_PER_SEC * 1000.0; // microsecondes
     
     _vec = vecCopy;
     _deq = deqCopy;
@@ -94,9 +94,9 @@ void PmergeMe::sort() {
     std::cout << std::endl;
     
     std::cout << "Time to process a range of " << _vec.size() 
-              << " elements with std::vector : " << time1 << " us" << std::endl;
+              << " elements with std::vector : " << time1 << " ms" << std::endl;
     std::cout << "Time to process a range of " << _deq.size() 
-              << " elements with std::deque  : " << time2 << " us" << std::endl;
+              << " elements with std::deque  : " << time2 << " ms" << std::endl;
 }
 
 // ========== FORD-JOHNSON POUR VECTOR ==========

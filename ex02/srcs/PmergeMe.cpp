@@ -6,7 +6,7 @@
 /*   By: ayarmaya <ayarmaya@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:49:56 by ayarmaya          #+#    #+#             */
-/*   Updated: 2025/06/12 00:04:57 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2025/06/12 00:33:12 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,21 +67,16 @@ void PmergeMe::sort() {
     display();
     
     // Tri avec vector
-    std::vector<int> vecCopy = _vec;
     clock_t start1 = clock();
-    fordJohnsonSortVector(vecCopy);
+    fordJohnsonSortVector(_vec);
     clock_t end1 = clock();
-    double time1 = static_cast<double>(end1 - start1) / CLOCKS_PER_SEC * 1000.0; // microsecondes
+    double time1 = static_cast<double>(end1 - start1) / CLOCKS_PER_SEC * 1000.0;
     
-    // Tri avec deque
-    std::deque<int> deqCopy = _deq;
+    // Tri avec deque 
     clock_t start2 = clock();
-    fordJohnsonSortDeque(deqCopy);
+    fordJohnsonSortDeque(_deq);
     clock_t end2 = clock();
-    double time2 = static_cast<double>(end2 - start2) / CLOCKS_PER_SEC * 1000.0; // microsecondes
-    
-    _vec = vecCopy;
-    _deq = deqCopy;
+    double time2 = static_cast<double>(end2 - start2) / CLOCKS_PER_SEC * 1000.0;
     
     // Afficher après tri
     std::cout << "After: ";

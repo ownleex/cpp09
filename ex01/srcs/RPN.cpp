@@ -6,7 +6,7 @@
 /*   By: ayarmaya <ayarmaya@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:43:58 by ayarmaya          #+#    #+#             */
-/*   Updated: 2025/06/10 23:00:19 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2025/06/12 00:34:59 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,7 @@ RPN::RPN()
 {
 }
 
-RPN::RPN(const RPN& other)
-{
-    _operands = other._operands;
-}
+RPN::RPN(const RPN& other) : _operands(other._operands) {}
 
 RPN& RPN::operator=(const RPN& other)
 {

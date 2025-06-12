@@ -6,7 +6,7 @@
 /*   By: ayarmaya <ayarmaya@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:49:56 by ayarmaya          #+#    #+#             */
-/*   Updated: 2025/06/12 01:00:23 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2025/06/12 02:05:33 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ bool PmergeMe::parseArgs(int argc, char** argv) {
         
         // Vérifier que c'est un nombre positif
         for (size_t j = 0; j < arg.length(); ++j) {
-            if (!isdigit(arg[j])) {
+            if (!std::isdigit(arg[j])) {
                 std::cerr << "Error" << std::endl;
                 return false;
             }

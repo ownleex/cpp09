@@ -6,7 +6,7 @@
 /*   By: ayarmaya <ayarmaya@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:49:56 by ayarmaya          #+#    #+#             */
-/*   Updated: 2025/06/12 17:00:20 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2025/06/12 19:04:50 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,24 +118,25 @@ void PmergeMe::sort() {
 /**
  * Génère la séquence de Jacobsthal jusqu'à n
  * La séquence de Jacobsthal : 1, 3, 5, 11, 21, 43, 85, 171, ...
- * Formule : J(n) = J(n-1) + 2*J(n-2) avec J(0)=0, J(1)=1
+ * Formule : J[0]=0, J[1]=1 puis J[i] = J[i-1] + 2*J[i-2]
+ * size = i;
  * Cette séquence détermine l'ordre optimal d'insertion pour minimiser les comparaisons
  */
-std::vector<int> PmergeMe::createJacobsthalSequenceVector(int n) {
+std::vector<int> PmergeMe::createJacobsthalSequenceVector(int size) {
     std::vector<int> jacobsthal;
-    if (n <= 0) return jacobsthal;
+    if (size <= 0) return jacobsthal;
     
     jacobsthal.push_back(1);
-    if (n == 1) return jacobsthal;
+    if (size == 1) return jacobsthal;
     
     jacobsthal.push_back(3);
-    if (n <= 3) return jacobsthal;
+    if (size <= 3) return jacobsthal;
     
-    // Générer la séquence de Jacobsthal : J(n) = J(n-1) + 2*J(n-2)
+    // Générer la séquence de Jacobsthal : J[i] = J[i-1] + 2*J[i-2]
     int prev2 = 1, prev1 = 3;
     while (true) {
         int next = prev1 + 2 * prev2;
-        if (next > n) break;
+        if (next > size) break;
         jacobsthal.push_back(next);
         prev2 = prev1;
         prev1 = next;
@@ -144,11 +145,12 @@ std::vector<int> PmergeMe::createJacobsthalSequenceVector(int n) {
 }
 
 /**
- * Recherche binaire pour trouver la position d'insertion optimale
+ * Recherche binaire (dichotomique) pour trouver la position d'insertion optimale
  * @param vec: le vecteur dans lequel chercher
  * @param value: la valeur à insérer
  * @param end: l'index de fin de recherche
  * @return l'index où insérer la valeur
+ * ici on compare tout le temps à la moitié puis à la moitié restante et ainsi de suite
  */
 int PmergeMe::binarySearchVector(const std::vector<int>& vec, int value, int end) {
     int left = 0, right = end;
@@ -174,16 +176,16 @@ int PmergeMe::binarySearchVector(const std::vector<int>& vec, int value, int end
  * 4. Insertion optimale selon la séquence de Jacobsthal
  */
 void PmergeMe::fordJohnsonSortVector(std::vector<int>& vec) {
-    int n = vec.size();
-    if (n <= 1) return; // Cas de base : déjà trié
+    int size = vec.size();
+    if (size <= 1) return; // Cas de base : déjà trié
     
     /* === ÉTAPE 1 : Grouper par paires et trier chaque paire === */
     std::vector<std::pair<int, int> > pairs;
-    bool hasStraggler = (n % 2 == 1); // Y a-t-il un élément isolé ?
-    int straggler = hasStraggler ? vec[n - 1] : 0; // Sauvegarder l'élément isolé
+    bool hasAlone = (size % 2 == 1); // Y a-t-il un élément isolé ?
+    int alone = hasAlone ? vec[size - 1] : 0; // Sauvegarder l'élément isolé
     
     // Créer des paires et s'assurer que le premier élément est le plus grand
-    for (int i = 0; i < n - (hasStraggler ? 1 : 0); i += 2) {
+    for (int i = 0; i < size - (hasAlone ? 1 : 0); i += 2) {
         if (vec[i] > vec[i + 1])
             pairs.push_back(std::make_pair(vec[i], vec[i + 1])); // (grand, petit)
         else
@@ -268,9 +270,9 @@ void PmergeMe::fordJohnsonSortVector(std::vector<int>& vec) {
     }
     
     /* === ÉTAPE 5 : Insérer l'élément isolé (s'il existe) === */
-    if (hasStraggler) {
-        int pos = binarySearchVector(mainSequence, straggler, mainSequence.size());
-        mainSequence.insert(mainSequence.begin() + pos, straggler);
+    if (hasAlone) {
+        int pos = binarySearchVector(mainSequence, alone, mainSequence.size());
+        mainSequence.insert(mainSequence.begin() + pos, alone);
     }
     
     // Remplacer le vecteur original par la séquence triée
@@ -283,20 +285,20 @@ void PmergeMe::fordJohnsonSortVector(std::vector<int>& vec) {
  * Même logique que pour vector mais avec deque
  * Les deques permettent des insertions efficaces au début et à la fin
  */
-std::deque<int> PmergeMe::createJacobsthalSequenceDeque(int n) {
+std::deque<int> PmergeMe::createJacobsthalSequenceDeque(int size) {
     std::deque<int> jacobsthal;
-    if (n <= 0) return jacobsthal;
+    if (size <= 0) return jacobsthal;
     
     jacobsthal.push_back(1);
-    if (n == 1) return jacobsthal;
+    if (size == 1) return jacobsthal;
     
     jacobsthal.push_back(3);
-    if (n <= 3) return jacobsthal;
+    if (size <= 3) return jacobsthal;
     
     int prev2 = 1, prev1 = 3;
     while (true) {
         int next = prev1 + 2 * prev2;
-        if (next > n) break;
+        if (next > size) break;
         jacobsthal.push_back(next);
         prev2 = prev1;
         prev1 = next;
@@ -326,15 +328,15 @@ int PmergeMe::binarySearchDeque(const std::deque<int>& deq, int value, int end) 
  * du deque (insertion efficace en début avec push_front)
  */
 void PmergeMe::fordJohnsonSortDeque(std::deque<int>& deq) {
-    int n = deq.size();
-    if (n <= 1) return;
+    int size = deq.size();
+    if (size <= 1) return;
     
     // Même logique que pour vector...
     std::deque<std::pair<int, int> > pairs;
-    bool hasStraggler = (n % 2 == 1);
-    int straggler = hasStraggler ? deq[n - 1] : 0;
+    bool hasAlone = (size % 2 == 1);
+    int alone = hasAlone ? deq[size - 1] : 0;
     
-    for (int i = 0; i < n - (hasStraggler ? 1 : 0); i += 2) {
+    for (int i = 0; i < size - (hasAlone ? 1 : 0); i += 2) {
         if (deq[i] > deq[i + 1])
             pairs.push_back(std::make_pair(deq[i], deq[i + 1]));
         else
@@ -404,9 +406,9 @@ void PmergeMe::fordJohnsonSortDeque(std::deque<int>& deq) {
         }
     }
     
-    if (hasStraggler) {
-        int pos = binarySearchDeque(mainSequence, straggler, mainSequence.size());
-        mainSequence.insert(mainSequence.begin() + pos, straggler);
+    if (hasAlone) {
+        int pos = binarySearchDeque(mainSequence, alone, mainSequence.size());
+        mainSequence.insert(mainSequence.begin() + pos, alone);
     }
     
     deq = mainSequence;

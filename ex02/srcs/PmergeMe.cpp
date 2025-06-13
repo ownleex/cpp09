@@ -6,7 +6,7 @@
 /*   By: ayarmaya <ayarmaya@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:49:56 by ayarmaya          #+#    #+#             */
-/*   Updated: 2025/06/13 16:12:03 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2025/06/13 19:10:19 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,7 +213,6 @@ void PmergeMe::fordJohnsonSortVector(std::vector<int>& vec) {
             }
         }
     }
-    pairs = sortedPairs;
     
     /* === ÉTAPE 3 : Construire la séquence principale === */
     std::vector<int> mainSequence;   // Séquence finale triée
@@ -221,9 +220,9 @@ void PmergeMe::fordJohnsonSortVector(std::vector<int>& vec) {
     
     // La séquence principale commence avec tous les éléments maximaux (déjà triés)
     // Les éléments minimaux sont mis en attente pour insertion
-    for (size_t i = 0; i < pairs.size(); ++i) {
-        mainSequence.push_back(pairs[i].first);    // Élément maximal (déjà à sa place)
-        pendingElements.push_back(pairs[i].second); // Élément minimal (à insérer)
+    for (size_t i = 0; i < sortedPairs.size(); ++i) {
+        mainSequence.push_back(sortedPairs[i].first);    // Élément maximal (déjà à sa place)
+        pendingElements.push_back(sortedPairs[i].second); // Élément minimal (à insérer)
     }
     
     /* === ÉTAPE 4 : Insertion selon la séquence de Jacobsthal === */
@@ -261,7 +260,7 @@ void PmergeMe::fordJohnsonSortVector(std::vector<int>& vec) {
             }
         }
         
-        // Insérer les éléments restants (s'il y en a)
+        // Insérer les éléments restants (ceux dépassant les nombres Jacobsthal)
         for (size_t i = 0; i < inserted.size(); ++i) {
             if (!inserted[i]) {
                 int pos = binarySearchVector(mainSequence, pendingElements[i], mainSequence.size());
@@ -361,14 +360,13 @@ void PmergeMe::fordJohnsonSortDeque(std::deque<int>& deq) {
             }
         }
     }
-    pairs = sortedPairs;
     
     std::deque<int> mainSequence;
     std::deque<int> pendingElements;
     
-    for (size_t i = 0; i < pairs.size(); ++i) {
-        mainSequence.push_back(pairs[i].first);
-        pendingElements.push_back(pairs[i].second);
+    for (size_t i = 0; i < sortedPairs.size(); ++i) {
+        mainSequence.push_back(sortedPairs[i].first);
+        pendingElements.push_back(sortedPairs[i].second);
     }
     
     if (!pendingElements.empty()) {

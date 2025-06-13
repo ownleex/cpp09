@@ -6,7 +6,7 @@
 /*   By: ayarmaya <ayarmaya@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:49:56 by ayarmaya          #+#    #+#             */
-/*   Updated: 2025/06/13 00:48:40 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2025/06/13 16:12:03 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,7 +228,8 @@ void PmergeMe::fordJohnsonSortVector(std::vector<int>& vec) {
     
     /* === ÉTAPE 4 : Insertion selon la séquence de Jacobsthal === */
     if (!pendingElements.empty()) {
-        // Le premier élément pending est inséré en tête (il est forcément plus petit que les elements maximaux déjà présents dans mainSequence)
+        // Le premier élément pending est ≤ au premier élément de mainSequence
+        // donc il peut être inséré en tête sans recherche binaire
         mainSequence.insert(mainSequence.begin(), pendingElements[0]);
         
         // Générer la séquence de Jacobsthal pour optimiser les insertions suivantes

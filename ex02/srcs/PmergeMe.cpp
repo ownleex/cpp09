@@ -6,7 +6,7 @@
 /*   By: ayarmaya <ayarmaya@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:49:56 by ayarmaya          #+#    #+#             */
-/*   Updated: 2025/06/13 19:10:19 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2025/06/14 04:15:22 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,12 +69,12 @@ bool PmergeMe::parseArgs(int argc, char** argv) {
  */
 void PmergeMe::display() {
     std::cout << "Before: ";
-    size_t limit = (_vec.size() <= 5) ? _vec.size() : 4;
+    size_t limit = (_vec.size() <= 10) ? _vec.size() : 10;
     for (size_t i = 0; i < limit; ++i) {
         if (i > 0) std::cout << " ";
         std::cout << _vec[i];
     }
-    if (_vec.size() > 5) std::cout << " [...]";
+    if (_vec.size() > 10) std::cout << " [...]";
     std::cout << std::endl;
 }
 
@@ -98,12 +98,12 @@ void PmergeMe::sort() {
     
     // Afficher après tri
     std::cout << "After: ";
-    size_t limit = (_vec.size() <= 5) ? _vec.size() : 4;
+    size_t limit = (_vec.size() <= 10) ? _vec.size() : 10;
     for (size_t i = 0; i < limit; ++i) {
         if (i > 0) std::cout << " ";
         std::cout << _vec[i];
     }
-    if (_vec.size() > 5) std::cout << " [...]";
+    if (_vec.size() > 10) std::cout << " [...]";
     std::cout << std::endl;
     
     // Afficher les temps d'exécution
@@ -239,7 +239,7 @@ void PmergeMe::fordJohnsonSortVector(std::vector<int>& vec) {
         // Insérer selon l'ordre de Jacobsthal pour minimiser les comparaisons
         for (size_t i = 0; i < jacobsthal.size(); ++i) {
             int idx = jacobsthal[i] - 1; // Ajuster pour l'index base 0
-            if (idx < static_cast<int>(pendingElements.size()) && !inserted[idx]) {
+            if (!inserted[idx]) {
                 // Trouver la position optimale avec recherche binaire
                 int pos = binarySearchVector(mainSequence, pendingElements[idx], mainSequence.size());
                 mainSequence.insert(mainSequence.begin() + pos, pendingElements[idx]);
@@ -251,7 +251,7 @@ void PmergeMe::fordJohnsonSortVector(std::vector<int>& vec) {
             if (i > 0) {
                 int prevIdx = jacobsthal[i - 1] - 1;
                 for (int j = idx - 1; j > prevIdx; --j) {
-                    if (j >= 0 && j < static_cast<int>(pendingElements.size()) && !inserted[j]) {
+                    if (j >= 0 && !inserted[j]) {
                         int pos = binarySearchVector(mainSequence, pendingElements[j], mainSequence.size());
                         mainSequence.insert(mainSequence.begin() + pos, pendingElements[j]);
                         inserted[j] = true;
@@ -370,8 +370,7 @@ void PmergeMe::fordJohnsonSortDeque(std::deque<int>& deq) {
     }
     
     if (!pendingElements.empty()) {
-        // Utilisation de push_front pour deque (plus efficace qu'insert au début)
-        mainSequence.push_front(pendingElements[0]);
+        mainSequence.insert(mainSequence.begin(), pendingElements[0]);
         
         std::deque<int> jacobsthal = createJacobsthalSequenceDeque(pendingElements.size());
         std::deque<bool> inserted(pendingElements.size(), false);
@@ -379,7 +378,7 @@ void PmergeMe::fordJohnsonSortDeque(std::deque<int>& deq) {
         
         for (size_t i = 0; i < jacobsthal.size(); ++i) {
             int idx = jacobsthal[i] - 1;
-            if (idx < static_cast<int>(pendingElements.size()) && !inserted[idx]) {
+            if (!inserted[idx]) {
                 int pos = binarySearchDeque(mainSequence, pendingElements[idx], mainSequence.size());
                 mainSequence.insert(mainSequence.begin() + pos, pendingElements[idx]);
                 inserted[idx] = true;
@@ -388,7 +387,7 @@ void PmergeMe::fordJohnsonSortDeque(std::deque<int>& deq) {
             if (i > 0) {
                 int prevIdx = jacobsthal[i - 1] - 1;
                 for (int j = idx - 1; j > prevIdx; --j) {
-                    if (j >= 0 && j < static_cast<int>(pendingElements.size()) && !inserted[j]) {
+                    if (j >= 0 && !inserted[j]) {
                         int pos = binarySearchDeque(mainSequence, pendingElements[j], mainSequence.size());
                         mainSequence.insert(mainSequence.begin() + pos, pendingElements[j]);
                         inserted[j] = true;

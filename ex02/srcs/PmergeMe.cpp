@@ -6,7 +6,7 @@
 /*   By: ayarmaya <ayarmaya@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:49:56 by ayarmaya          #+#    #+#             */
-/*   Updated: 2025/06/15 02:57:56 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2025/06/15 21:14:44 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ bool PmergeMe::parseArgs(int argc, char** argv) {
 
 /**
  * Affiche la séquence avant le tri
- * Limite l'affichage aux 4 premiers éléments si plus de 5 éléments
  */
 void PmergeMe::display() {
     std::cout << "Before: ";

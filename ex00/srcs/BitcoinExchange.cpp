@@ -6,7 +6,7 @@
 /*   By: ayarmaya <ayarmaya@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:37:05 by ayarmaya          #+#    #+#             */
-/*   Updated: 2025/06/10 17:55:09 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2025/06/15 14:47:31 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,7 @@ bool BitcoinExchange::loadDatabase(const std::string& filename)
         if (firstLine)
         {
             firstLine = false;
-            continue; // Ignorer la première ligne (header)
+            continue;
         }
         
         size_t commaPos = line.find(',');
@@ -187,10 +187,32 @@ bool BitcoinExchange::processInputFile(const std::string& filename) const
     
     while (std::getline(file, line))
     {
+        // Ignorer les lignes vides
+        trimWhitespace(line);
+        if (line.empty())
+            continue;
+        
         if (firstLine)
         {
+            // Vérifier si la première ligne est un header valide
+            // Un header valide contient généralement "date" et "value" (insensible à la casse)
+            
+            // Convertir en minuscules pour la comparaison
+            for (size_t i = 0; i < line.length(); ++i)
+            {
+                line[i] = std::tolower(line[i]);
+            }
+            
+            // Vérifier la présence de "date" et "value" dans la ligne
+            if (line.find("date") != std::string::npos && 
+                line.find("value") != std::string::npos)
+            {
+                firstLine = false;
+                continue; // Ignorer cette ligne d'en-tête
+            }
+            
+            // Si ce n'est pas un header, traiter cette ligne comme une donnée normale
             firstLine = false;
-            continue; // Ignorer la première ligne
         }
         
         size_t pipePos = line.find('|');

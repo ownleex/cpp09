@@ -6,7 +6,7 @@
 /*   By: ayarmaya <ayarmaya@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:43:19 by ayarmaya          #+#    #+#             */
-/*   Updated: 2025/06/10 00:38:32 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2025/06/16 00:10:04 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 class RPN
 {
 private:
+    // Satck parce qu'il a une structure LIFO adaptée à ce projet 
+    // methode . push, .top et .pop suffisantes pour ce projet
     std::stack<double> _operands;
     
     bool isOperator(const std::string& token) const;

@@ -6,7 +6,7 @@
 /*   By: ayarmaya <ayarmaya@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:49:48 by ayarmaya          #+#    #+#             */
-/*   Updated: 2025/06/16 00:16:05 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2025/06/16 01:56:20 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ private:
     // Vector et Deque pour les algorithmes nécessitant accès aléatoire et insertions
     // methode .insert et acces par container[]
     // Vector est plus rapide car meme bloc mémoire pour les données
-    // Deque plus lent données stockées sous forme de pointeur dans des espaces mémoire disctint qui doit être déréférencer
+    // Deque plus lent données stockées sous forme de pointeur dans des espaces mémoire disctints qui doivent être déréférencer
     std::vector<int> _vec;
     std::deque<int> _deq;
     

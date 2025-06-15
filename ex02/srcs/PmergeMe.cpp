@@ -6,7 +6,7 @@
 /*   By: ayarmaya <ayarmaya@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:49:56 by ayarmaya          #+#    #+#             */
-/*   Updated: 2025/06/14 04:15:22 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2025/06/15 02:57:56 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,13 +124,11 @@ void PmergeMe::sort() {
  */
 std::vector<int> PmergeMe::createJacobsthalSequenceVector(int size) {
     std::vector<int> jacobsthal;
-    if (size <= 0) return jacobsthal;
+    if (size >= 1)
+        jacobsthal.push_back(1);
     
-    jacobsthal.push_back(1);
-    if (size == 1) return jacobsthal;
-    
-    jacobsthal.push_back(3);
-    if (size <= 3) return jacobsthal;
+    if (size >= 3) 
+        jacobsthal.push_back(3);
     
     // Générer la séquence de Jacobsthal : J[i] = J[i-1] + 2*J[i-2]
     int prev2 = 1, prev1 = 3;
@@ -287,13 +285,11 @@ void PmergeMe::fordJohnsonSortVector(std::vector<int>& vec) {
  */
 std::deque<int> PmergeMe::createJacobsthalSequenceDeque(int size) {
     std::deque<int> jacobsthal;
-    if (size <= 0) return jacobsthal;
+    if (size >= 1)
+        jacobsthal.push_back(1);
     
-    jacobsthal.push_back(1);
-    if (size == 1) return jacobsthal;
-    
-    jacobsthal.push_back(3);
-    if (size <= 3) return jacobsthal;
+    if (size >= 3) 
+        jacobsthal.push_back(3);
     
     int prev2 = 1, prev1 = 3;
     while (true) {

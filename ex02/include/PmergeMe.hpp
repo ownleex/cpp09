@@ -6,7 +6,7 @@
 /*   By: ayarmaya <ayarmaya@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:49:48 by ayarmaya          #+#    #+#             */
-/*   Updated: 2025/06/16 02:10:50 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2025/06/16 17:41:59 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,12 @@ private:
     
     // Ford-Johnson pour vector
     void fordJohnsonSortVector(std::vector<int>& vec);
-    std::vector<int> createJacobsthalSequenceVector(int n);
+    std::vector<int> createInsertionOrderVector(int n);
     int binarySearchVector(const std::vector<int>& arr, int value, int end);
     
     // Ford-Johnson pour deque
     void fordJohnsonSortDeque(std::deque<int>& deq);
-    std::deque<int> createJacobsthalSequenceDeque(int n);
+    std::deque<int> createInsertionOrderDeque(int n);
     int binarySearchDeque(const std::deque<int>& arr, int value, int end);
 
     void display(int n);

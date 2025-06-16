@@ -6,7 +6,7 @@
 /*   By: ayarmaya <ayarmaya@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:49:56 by ayarmaya          #+#    #+#             */
-/*   Updated: 2025/06/16 02:15:40 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2025/06/16 18:08:12 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,30 +114,30 @@ void PmergeMe::sort() {
 /* ======================== FORD-JOHNSON POUR VECTOR ======================== */
 
 /**
- * Génère la séquence de Jacobsthal jusqu'à n
- * La séquence de Jacobsthal : 1, 3, 5, 11, 21, 43, 85, 171, ...
+ * Génère la séquence d'index jusqu'à size
+ * La séquence d'index : 1, 3, 5, 11, 21, 43, 85, 171, ...
  * Formule : J[0]=0, J[1]=1 puis J[i] = J[i-1] + 2*J[i-2]
  * size = i;
  * Cette séquence détermine l'ordre optimal d'insertion pour minimiser les comparaisons
  */
-std::vector<int> PmergeMe::createJacobsthalSequenceVector(int size) {
-    std::vector<int> jacobsthal;
+std::vector<int> PmergeMe::createInsertionOrderVector(int size) {
+    std::vector<int> insertionOrder;
     if (size >= 1)
-        jacobsthal.push_back(1);
+        insertionOrder.push_back(1);
     
     if (size >= 3) 
-        jacobsthal.push_back(3);
+        insertionOrder.push_back(3);
     
-    // Générer la séquence de Jacobsthal : J[i] = J[i-1] + 2*J[i-2]
+    // Générer la séquence d'index : J[i] = J[i-1] + 2*J[i-2]
     int prev2 = 1, prev1 = 3;
     while (true) {
         int next = prev1 + 2 * prev2;
         if (next > size) break;
-        jacobsthal.push_back(next);
+        insertionOrder.push_back(next);
         prev2 = prev1;
         prev1 = next;
     }
-    return jacobsthal;
+    return insertionOrder;
 }
 
 /**
@@ -169,7 +169,7 @@ int PmergeMe::binarySearchVector(const std::vector<int>& vec, int value, int end
  * 1. Groupement par paires et tri local
  * 2. Tri récursif des éléments maximaux
  * 3. Construction de la séquence principale
- * 4. Insertion optimale selon la séquence de Jacobsthal
+ * 4. Insertion optimale selon la séquence d'insertion de Ford et Johnson
  */
 void PmergeMe::fordJohnsonSortVector(std::vector<int>& vec) {
     int size = vec.size();
@@ -221,34 +221,34 @@ void PmergeMe::fordJohnsonSortVector(std::vector<int>& vec) {
         pendingElements.push_back(sortedPairs[i].second); // Élément minimal (à insérer)
     }
     
-    /* === ÉTAPE 4 : Insertion selon la séquence de Jacobsthal === */
+    /* === ÉTAPE 4 : Insertion selon la séquence d'insertion de Ford et Johnson' === */
     if (!pendingElements.empty()) {
         // Le premier élément pending est ≤ au premier élément de mainSequence
         // donc il peut être inséré en tête sans recherche binaire
         mainSequence.insert(mainSequence.begin(), pendingElements[0]);
         
-        // Générer la séquence de Jacobsthal pour optimiser les insertions suivantes
-        std::vector<int> jacobsthal = createJacobsthalSequenceVector(pendingElements.size());
+        // Générer la séquence d'insertion pour optimiser les insertions suivantes
+        std::vector<int> insertionOrder = createInsertionOrderVector(pendingElements.size());
         std::vector<bool> inserted(pendingElements.size(), false);
         inserted[0] = true; // Le premier est déjà inséré
         
-        // Insérer selon l'ordre de Jacobsthal pour minimiser les comparaisons
-        for (size_t i = 0; i < jacobsthal.size(); ++i) {
-            int idx = jacobsthal[i] - 1; // Ajuster pour l'index base 0
+        // Insérer selon la séquence d'insertion pour minimiser les comparaisons
+        for (size_t i = 0; i < insertionOrder.size(); ++i) {
+            int idx = insertionOrder[i] - 1; // Ajuster pour l'index base 0
             if (!inserted[idx]) {
                 // Trouver la position optimale avec recherche binaire
-                int pos = binarySearchVector(mainSequence, pendingElements[idx], mainSequence.size());
+                int pos = binarySearchVector(mainSequence, pendingElements[idx], idx + 1);
                 mainSequence.insert(mainSequence.begin() + pos, pendingElements[idx]);
                 inserted[idx] = true;
             }
             
-            // Insérer les éléments entre les indices Jacobsthal (ordre décroissant)
+            // Insérer les éléments entre les indices de la séquence (ordre décroissant)
             // Ceci garantit que chaque élément a le nombre minimal de positions possibles
             if (i > 0) {
-                int prevIdx = jacobsthal[i - 1] - 1;
+                int prevIdx = insertionOrder[i - 1] - 1;
                 for (int j = idx - 1; j > prevIdx; --j) {
                     if (j >= 0 && !inserted[j]) {
-                        int pos = binarySearchVector(mainSequence, pendingElements[j], mainSequence.size());
+                        int pos = binarySearchVector(mainSequence, pendingElements[j], j + 1);
                         mainSequence.insert(mainSequence.begin() + pos, pendingElements[j]);
                         inserted[j] = true;
                     }
@@ -256,7 +256,7 @@ void PmergeMe::fordJohnsonSortVector(std::vector<int>& vec) {
             }
         }
         
-        // Insérer les éléments restants (ceux dépassant les nombres Jacobsthal)
+        // Insérer les éléments restants (ceux dépassant les nombres de la séquence)
         for (size_t i = 0; i < inserted.size(); ++i) {
             if (!inserted[i]) {
                 int pos = binarySearchVector(mainSequence, pendingElements[i], mainSequence.size());
@@ -281,23 +281,23 @@ void PmergeMe::fordJohnsonSortVector(std::vector<int>& vec) {
  * Même logique que pour vector mais avec deque
  * Les deques permettent des insertions efficaces au début et à la fin
  */
-std::deque<int> PmergeMe::createJacobsthalSequenceDeque(int size) {
-    std::deque<int> jacobsthal;
+std::deque<int> PmergeMe::createInsertionOrderDeque(int size) {
+    std::deque<int> insertionOrder;
     if (size >= 1)
-        jacobsthal.push_back(1);
+        insertionOrder.push_back(1);
     
     if (size >= 3) 
-        jacobsthal.push_back(3);
+        insertionOrder.push_back(3);
     
     int prev2 = 1, prev1 = 3;
     while (true) {
         int next = prev1 + 2 * prev2;
         if (next > size) break;
-        jacobsthal.push_back(next);
+        insertionOrder.push_back(next);
         prev2 = prev1;
         prev1 = next;
     }
-    return jacobsthal;
+    return insertionOrder;
 }
 
 /**
@@ -366,23 +366,23 @@ void PmergeMe::fordJohnsonSortDeque(std::deque<int>& deq) {
     if (!pendingElements.empty()) {
         mainSequence.insert(mainSequence.begin(), pendingElements[0]);
         
-        std::deque<int> jacobsthal = createJacobsthalSequenceDeque(pendingElements.size());
+        std::deque<int> insertionOrder = createInsertionOrderDeque(pendingElements.size());
         std::deque<bool> inserted(pendingElements.size(), false);
         inserted[0] = true;
         
-        for (size_t i = 0; i < jacobsthal.size(); ++i) {
-            int idx = jacobsthal[i] - 1;
+        for (size_t i = 0; i < insertionOrder.size(); ++i) {
+            int idx = insertionOrder[i] - 1;
             if (!inserted[idx]) {
-                int pos = binarySearchDeque(mainSequence, pendingElements[idx], mainSequence.size());
+                int pos = binarySearchDeque(mainSequence, pendingElements[idx], idx + 1);
                 mainSequence.insert(mainSequence.begin() + pos, pendingElements[idx]);
                 inserted[idx] = true;
             }
             
             if (i > 0) {
-                int prevIdx = jacobsthal[i - 1] - 1;
+                int prevIdx = insertionOrder[i - 1] - 1;
                 for (int j = idx - 1; j > prevIdx; --j) {
                     if (j >= 0 && !inserted[j]) {
-                        int pos = binarySearchDeque(mainSequence, pendingElements[j], mainSequence.size());
+                        int pos = binarySearchDeque(mainSequence, pendingElements[j], j + 1);
                         mainSequence.insert(mainSequence.begin() + pos, pendingElements[j]);
                         inserted[j] = true;
                     }

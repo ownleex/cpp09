@@ -6,7 +6,7 @@
 /*   By: ayarmaya <ayarmaya@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:49:56 by ayarmaya          #+#    #+#             */
-/*   Updated: 2025/06/16 18:08:12 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2025/06/16 18:20:18 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,7 +237,7 @@ void PmergeMe::fordJohnsonSortVector(std::vector<int>& vec) {
             int idx = insertionOrder[i] - 1; // Ajuster pour l'index base 0
             if (!inserted[idx]) {
                 // Trouver la position optimale avec recherche binaire
-                int pos = binarySearchVector(mainSequence, pendingElements[idx], idx + 1);
+                int pos = binarySearchVector(mainSequence, pendingElements[idx], mainSequence.size());
                 mainSequence.insert(mainSequence.begin() + pos, pendingElements[idx]);
                 inserted[idx] = true;
             }
@@ -248,7 +248,7 @@ void PmergeMe::fordJohnsonSortVector(std::vector<int>& vec) {
                 int prevIdx = insertionOrder[i - 1] - 1;
                 for (int j = idx - 1; j > prevIdx; --j) {
                     if (j >= 0 && !inserted[j]) {
-                        int pos = binarySearchVector(mainSequence, pendingElements[j], j + 1);
+                        int pos = binarySearchVector(mainSequence, pendingElements[j], mainSequence.size());
                         mainSequence.insert(mainSequence.begin() + pos, pendingElements[j]);
                         inserted[j] = true;
                     }
@@ -373,7 +373,7 @@ void PmergeMe::fordJohnsonSortDeque(std::deque<int>& deq) {
         for (size_t i = 0; i < insertionOrder.size(); ++i) {
             int idx = insertionOrder[i] - 1;
             if (!inserted[idx]) {
-                int pos = binarySearchDeque(mainSequence, pendingElements[idx], idx + 1);
+                int pos = binarySearchDeque(mainSequence, pendingElements[idx], mainSequence.size());
                 mainSequence.insert(mainSequence.begin() + pos, pendingElements[idx]);
                 inserted[idx] = true;
             }
@@ -382,7 +382,7 @@ void PmergeMe::fordJohnsonSortDeque(std::deque<int>& deq) {
                 int prevIdx = insertionOrder[i - 1] - 1;
                 for (int j = idx - 1; j > prevIdx; --j) {
                     if (j >= 0 && !inserted[j]) {
-                        int pos = binarySearchDeque(mainSequence, pendingElements[j], j + 1);
+                        int pos = binarySearchDeque(mainSequence, pendingElements[j], mainSequence.size());
                         mainSequence.insert(mainSequence.begin() + pos, pendingElements[j]);
                         inserted[j] = true;
                     }

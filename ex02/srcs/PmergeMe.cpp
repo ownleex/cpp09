@@ -6,7 +6,7 @@
 /*   By: ayarmaya <ayarmaya@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:49:56 by ayarmaya          #+#    #+#             */
-/*   Updated: 2025/06/15 21:14:44 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2025/06/16 02:15:40 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,16 +64,21 @@ bool PmergeMe::parseArgs(int argc, char** argv) {
 }
 
 /**
- * Affiche la séquence avant le tri
+ * Affiche la séquence avant et après le tri
  */
-void PmergeMe::display() {
-    std::cout << "Before: ";
-    size_t limit = (_vec.size() <= 10) ? _vec.size() : 10;
+void PmergeMe::display(int n) {
+    if (n == 0)
+        std::cout << "Before: ";
+    else
+        std::cout << "After: ";
+        
+        
+    size_t limit = (_vec.size() <= 10) ? _vec.size() : 10;    
     for (size_t i = 0; i < limit; ++i) {
-        if (i > 0) std::cout << " ";
-        std::cout << _vec[i];
+        std::cout << _vec[i] << " ";
     }
-    if (_vec.size() > 10) std::cout << " [...]";
+
+    if (_vec.size() > 10) std::cout << "[...]";
     std::cout << std::endl;
 }
 
@@ -81,7 +86,8 @@ void PmergeMe::display() {
  * Lance le tri avec les deux conteneurs et mesure les temps d'exécution
  */
 void PmergeMe::sort() {
-    display();
+    // Afficher avant tri
+    display(0);
     
     // Tri avec vector - mesure du temps 
     clock_t start1 = std::clock();
@@ -96,14 +102,7 @@ void PmergeMe::sort() {
     double time2 = static_cast<double>(end2 - start2) / CLOCKS_PER_SEC * 1000.0;
     
     // Afficher après tri
-    std::cout << "After: ";
-    size_t limit = (_vec.size() <= 10) ? _vec.size() : 10;
-    for (size_t i = 0; i < limit; ++i) {
-        if (i > 0) std::cout << " ";
-        std::cout << _vec[i];
-    }
-    if (_vec.size() > 10) std::cout << " [...]";
-    std::cout << std::endl;
+    display(1);
     
     // Afficher les temps d'exécution
     std::cout << "Time to process a range of " << _vec.size() 

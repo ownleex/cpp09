@@ -6,7 +6,7 @@
 /*   By: ayarmaya <ayarmaya@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:49:48 by ayarmaya          #+#    #+#             */
-/*   Updated: 2025/06/16 01:56:20 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2025/06/16 02:10:50 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ private:
     std::deque<int> createJacobsthalSequenceDeque(int n);
     int binarySearchDeque(const std::deque<int>& arr, int value, int end);
 
-    void display();
+    void display(int n);
 
 public:
     PmergeMe();

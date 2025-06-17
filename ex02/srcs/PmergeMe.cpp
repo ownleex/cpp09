@@ -6,7 +6,7 @@
 /*   By: ayarmaya <ayarmaya@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:49:56 by ayarmaya          #+#    #+#             */
-/*   Updated: 2025/06/17 20:11:36 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2025/06/17 20:18:05 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,7 @@ void PmergeMe::sort() {
 /**
  * Génère la séquence d'index jusqu'à size
  * La séquence d'index : 1, 3, 5, 11, 21, 43, 85, 171, ...
- * Formule : J[0]=0, J[1]=1 puis J[i] = J[i-1] + 2*J[i-2]
- * size = i;
+ * Formule : J[0]=1, J[1]=3 puis J[i] = J[i-1] + 2*J[i-2]
  * Cette séquence détermine l'ordre optimal d'insertion pour minimiser les comparaisons
  */
 std::vector<int> PmergeMe::createInsertionOrderVector(int size) {
@@ -132,7 +131,7 @@ std::vector<int> PmergeMe::createInsertionOrderVector(int size) {
 }
 
 /**
- * Recherche binaire (dichotomique) pour trouver la position d'insertion optimale
+ * Recherche binaire (dichotomique) pour trouver la position d'insertion
  * @param vec: le vecteur dans lequel chercher
  * @param value: la valeur à insérer
  * @param end: l'index de fin de recherche

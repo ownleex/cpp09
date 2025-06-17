@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   PmergeMe.cpp                                       :+:      :+:    :+:   */
+/*   PmergeMe_bis.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ayarmaya <ayarmaya@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:49:56 by ayarmaya          #+#    #+#             */
-/*   Updated: 2025/06/17 20:11:36 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2025/06/17 19:32:18 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ bool PmergeMe::parseArgs(int argc, char** argv) {
     for (int i = 1; i < argc; ++i) {
         std::string arg(argv[i]);
         
+        // Vérifier que c'est un nombre positif (tous les caractères sont des chiffres)
         for (size_t j = 0; j < arg.length(); ++j) {
             if (!std::isdigit(arg[j])) {
                 std::cerr << "Error" << std::endl;
@@ -47,12 +48,14 @@ bool PmergeMe::parseArgs(int argc, char** argv) {
             }
         }
         
+        // Convertir et vérifier la limite (doit être positif et <= INT_MAX)
         long long num = std::atoll(arg.c_str());
         if (num > INT_MAX || num <= 0) {
             std::cerr << "Error" << std::endl;
             return false;
         }
         
+        // Ajouter le nombre aux deux conteneurs
         int value = static_cast<int>(num);
         _vec.push_back(value);
         _deq.push_back(value);
@@ -83,20 +86,25 @@ void PmergeMe::display(int n) {
  * Lance le tri avec les deux conteneurs et mesure les temps d'exécution
  */
 void PmergeMe::sort() {
+    // Afficher avant tri
     display(0);
     
+    // Tri avec vector - mesure du temps 
     clock_t start1 = std::clock();
     fordJohnsonSortVector(_vec);
     clock_t end1 = std::clock();
     double time1 = static_cast<double>(end1 - start1) / CLOCKS_PER_SEC * 1000.0;
     
+    // Tri avec deque - mesure du temps
     clock_t start2 = std::clock();
     fordJohnsonSortDeque(_deq);
     clock_t end2 = std::clock();
     double time2 = static_cast<double>(end2 - start2) / CLOCKS_PER_SEC * 1000.0;
     
+    // Afficher après tri
     display(1);
     
+    // Afficher les temps d'exécution
     std::cout << "Time to process a range of " << _vec.size() 
               << " elements with std::vector : " << time1 << " ms" << std::endl;
     std::cout << "Time to process a range of " << _deq.size() 
@@ -120,6 +128,7 @@ std::vector<int> PmergeMe::createInsertionOrderVector(int size) {
     if (size >= 3) 
         insertionOrder.push_back(3);
     
+    // Générer la séquence d'index : J[i] = J[i-1] + 2*J[i-2]
     int prev2 = 1, prev1 = 3;
     while (true) {
         int next = prev1 + 2 * prev2;
@@ -164,26 +173,32 @@ int PmergeMe::binarySearchVector(const std::vector<int>& vec, int value, int end
  */
 void PmergeMe::fordJohnsonSortVector(std::vector<int>& vec) {
     int size = vec.size();
-    if (size <= 1) return;
+    if (size <= 1) return; // Cas de base : déjà trié
     
+    /* === ÉTAPE 1 : Grouper par paires et trier chaque paire === */
     std::vector<std::pair<int, int> > pairs;
-    bool hasAlone = (size % 2 == 1);
-    int alone = hasAlone ? vec[size - 1] : 0;
+    bool hasAlone = (size % 2 == 1); // Y a-t-il un élément isolé ?
+    int alone = hasAlone ? vec[size - 1] : 0; // Sauvegarder l'élément isolé
     
+    // Créer des paires et s'assurer que le premier élément est le plus grand
     for (int i = 0; i < size - (hasAlone ? 1 : 0); i += 2) {
         if (vec[i] > vec[i + 1])
-            pairs.push_back(std::make_pair(vec[i], vec[i + 1]));
+            pairs.push_back(std::make_pair(vec[i], vec[i + 1])); // (grand, petit)
         else
-            pairs.push_back(std::make_pair(vec[i + 1], vec[i]));
+            pairs.push_back(std::make_pair(vec[i + 1], vec[i])); // (grand, petit)
     }
     
+    /* === ÉTAPE 2 : Trier les paires par leur élément maximal (récursion) === */
     std::vector<int> maxElements;
     for (size_t i = 0; i < pairs.size(); ++i)
-        maxElements.push_back(pairs[i].first);
+        maxElements.push_back(pairs[i].first); // Extraire tous les éléments maximaux
     
+    // Trier récursivement les éléments maximaux
     if (maxElements.size() > 1)
         fordJohnsonSortVector(maxElements);
     
+    // Réorganiser les paires selon l'ordre des maxElements triés
+    // Ceci garantit que les paires sont ordonnées selon leurs éléments maximaux
     std::vector<std::pair<int, int> > sortedPairs;
     for (size_t i = 0; i < maxElements.size(); ++i) {
         for (size_t j = 0; j < pairs.size(); ++j) {
@@ -195,29 +210,40 @@ void PmergeMe::fordJohnsonSortVector(std::vector<int>& vec) {
         }
     }
     
-    std::vector<int> mainSequence;
-    std::vector<int> pendingElements;
+    /* === ÉTAPE 3 : Construire la séquence principale === */
+    std::vector<int> mainSequence;   // Séquence finale triée
+    std::vector<int> pendingElements; // Éléments à insérer
     
+    // La séquence principale commence avec tous les éléments maximaux (déjà triés)
+    // Les éléments minimaux sont mis en attente pour insertion
     for (size_t i = 0; i < sortedPairs.size(); ++i) {
-        mainSequence.push_back(sortedPairs[i].first);
-        pendingElements.push_back(sortedPairs[i].second);
+        mainSequence.push_back(sortedPairs[i].first);    // Élément maximal (déjà à sa place)
+        pendingElements.push_back(sortedPairs[i].second); // Élément minimal (à insérer)
     }
     
+    /* === ÉTAPE 4 : Insertion selon la séquence d'insertion de Ford et Johnson' === */
     if (!pendingElements.empty()) {
+        // Le premier élément pending est ≤ au premier élément de mainSequence
+        // donc il peut être inséré en tête sans recherche binaire
         mainSequence.insert(mainSequence.begin(), pendingElements[0]);
         
+        // Générer la séquence d'insertion pour optimiser les insertions suivantes
         std::vector<int> insertionOrder = createInsertionOrderVector(pendingElements.size());
         std::vector<bool> inserted(pendingElements.size(), false);
-        inserted[0] = true;
+        inserted[0] = true; // Le premier est déjà inséré
         
+        // Insérer selon la séquence d'insertion pour minimiser les comparaisons
         for (size_t i = 0; i < insertionOrder.size(); ++i) {
-            int idx = insertionOrder[i] - 1;
+            int idx = insertionOrder[i] - 1; // Ajuster pour l'index base 0
             if (!inserted[idx]) {
+                // Trouver la position optimale avec recherche binaire
                 int pos = binarySearchVector(mainSequence, pendingElements[idx], mainSequence.size());
                 mainSequence.insert(mainSequence.begin() + pos, pendingElements[idx]);
                 inserted[idx] = true;
             }
             
+            // Insérer les éléments entre les indices de la séquence (ordre décroissant)
+            // Ceci garantit que chaque élément a le nombre minimal de positions possibles
             if (i > 0) {
                 int prevIdx = insertionOrder[i - 1] - 1;
                 for (int j = idx - 1; j > prevIdx; --j) {
@@ -230,6 +256,7 @@ void PmergeMe::fordJohnsonSortVector(std::vector<int>& vec) {
             }
         }
         
+        // Insérer les éléments restants (ceux dépassant les nombres de la séquence)
         for (size_t i = 0; i < inserted.size(); ++i) {
             if (!inserted[i]) {
                 int pos = binarySearchVector(mainSequence, pendingElements[i], mainSequence.size());
@@ -238,11 +265,13 @@ void PmergeMe::fordJohnsonSortVector(std::vector<int>& vec) {
         }
     }
     
+    /* === ÉTAPE 5 : Insérer l'élément isolé (s'il existe) === */
     if (hasAlone) {
         int pos = binarySearchVector(mainSequence, alone, mainSequence.size());
         mainSequence.insert(mainSequence.begin() + pos, alone);
     }
     
+    // Remplacer le vecteur original par la séquence triée
     vec = mainSequence;
 }
 

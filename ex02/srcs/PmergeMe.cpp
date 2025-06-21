@@ -6,7 +6,7 @@
 /*   By: ayarmaya <ayarmaya@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:49:56 by ayarmaya          #+#    #+#             */
-/*   Updated: 2025/06/17 20:18:05 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2025/06/21 02:43:53 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,11 +71,11 @@ void PmergeMe::display(int n) {
         
         
     size_t limit = (_vec.size() <= 10) ? _vec.size() : 10;    
-    for (size_t i = 0; i < limit; ++i) {
+    for (size_t i = 0; i < limit; ++i)
         std::cout << _vec[i] << " ";
-    }
 
-    if (_vec.size() > 10) std::cout << "[...]";
+    if (_vec.size() > 10)
+        std::cout << "[...]";
     std::cout << std::endl;
 }
 

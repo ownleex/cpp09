@@ -6,20 +6,17 @@
 /*   By: ayarmaya <ayarmaya@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:43:58 by ayarmaya          #+#    #+#             */
-/*   Updated: 2025/06/12 00:34:59 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2025/06/21 02:14:27 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "RPN.hpp"
 
-RPN::RPN()
-{
-}
+RPN::RPN() {}
 
 RPN::RPN(const RPN& other) : _operands(other._operands) {}
 
-RPN& RPN::operator=(const RPN& other)
-{
+RPN& RPN::operator=(const RPN& other) {
     if (this != &other)
     {
         _operands = other._operands;
@@ -27,17 +24,13 @@ RPN& RPN::operator=(const RPN& other)
     return *this;
 }
 
-RPN::~RPN()
-{
-}
+RPN::~RPN() {}
 
-bool RPN::isOperator(const std::string& token) const
-{
+bool RPN::isOperator(const std::string& token) const {
     return (token == "+" || token == "-" || token == "*" || token == "/");
 }
 
-bool RPN::isValidNumber(const std::string& token) const
-{
+bool RPN::isValidNumber(const std::string& token) const {
     // Accepter seulement les chiffres 0-9 (un seul caractère)
     if (token.length() == 1 && std::isdigit(token[0]))
         return true;
@@ -45,16 +38,14 @@ bool RPN::isValidNumber(const std::string& token) const
     return false;
 }
 
-double RPN::performOperation(double a, double b, const std::string& op) const
-{
+double RPN::performOperation(double a, double b, const std::string& op) const {
     if (op == "+")
         return a + b;
     else if (op == "-")
         return a - b;
     else if (op == "*")
         return a * b;
-    else if (op == "/")
-    {
+    else if (op == "/") {
         if (b == 0)
             throw std::runtime_error("Error: division by zero");
         return a / b;
@@ -63,15 +54,12 @@ double RPN::performOperation(double a, double b, const std::string& op) const
         throw std::runtime_error("Error: unknown operator");
 }
 
-void RPN::processToken(const std::string& token)
-{
-    if (isValidNumber(token))
-    {
+void RPN::processToken(const std::string& token) {
+    if (isValidNumber(token)) {
         double num = std::atoi(token.c_str());
         _operands.push(num);
     }
-    else if (isOperator(token))
-    {
+    else if (isOperator(token)) {
         if (_operands.size() < 2)
             throw std::runtime_error("Error: insufficient operands");
         
@@ -83,34 +71,28 @@ void RPN::processToken(const std::string& token)
         double result = performOperation(a, b, token);
         _operands.push(result);
     }
-    else
-    {
+    else {
         throw std::runtime_error("Error: invalid token");
     }
 }
 
-double RPN::evaluate(const std::string& expression)
-{
+double RPN::evaluate(const std::string& expression) {
     // Vérifier s'il y a des parenthèses (interdites)
     if (expression.find('(') != std::string::npos || 
-        expression.find(')') != std::string::npos)
-    {
+        expression.find(')') != std::string::npos) {
         throw std::runtime_error("Error");
     }
     
     std::stringstream ss(expression);
     std::string token;
     
-    while (ss >> token)
-    {
+    while (ss >> token) {
         processToken(token);
     }
     
     // À la fin, il doit y avoir exactement un élément dans la pile
     if (_operands.size() != 1)
-    {
         throw std::runtime_error("Error: invalid expression");
-    }
     
     return _operands.top();
 }

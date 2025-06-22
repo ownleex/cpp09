@@ -6,7 +6,7 @@
 /*   By: ayarmaya <ayarmaya@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 22:43:58 by ayarmaya          #+#    #+#             */
-/*   Updated: 2025/06/21 02:14:27 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2025/06/22 12:59:20 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ bool RPN::isOperator(const std::string& token) const {
 }
 
 bool RPN::isValidNumber(const std::string& token) const {
-    // Accepter seulement les chiffres 0-9 (un seul caractère)
     if (token.length() == 1 && std::isdigit(token[0]))
         return true;
     
@@ -77,7 +76,6 @@ void RPN::processToken(const std::string& token) {
 }
 
 double RPN::evaluate(const std::string& expression) {
-    // Vérifier s'il y a des parenthèses (interdites)
     if (expression.find('(') != std::string::npos || 
         expression.find(')') != std::string::npos) {
         throw std::runtime_error("Error");
@@ -90,7 +88,6 @@ double RPN::evaluate(const std::string& expression) {
         processToken(token);
     }
     
-    // À la fin, il doit y avoir exactement un élément dans la pile
     if (_operands.size() != 1)
         throw std::runtime_error("Error: invalid expression");
     
